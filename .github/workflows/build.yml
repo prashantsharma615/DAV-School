@@ -1,0 +1,68 @@
+name: Build Android app & website
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install app tools (Capacitor)
+        run: npm install
+
+      - name: Create Android project
+        run: |
+          npx cap add android
+          npx cap sync android
+
+      - name: App icon
+        continue-on-error: true
+        run: npx --yes @capacitor/assets generate --android --iconBackgroundColor "#1e3a8a"
+
+      - name: Build APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk ../DAV-Class4-Study-Helper.apk
+
+      - name: Upload APK (Actions tab)
+        uses: actions/upload-artifact@v4
+        with:
+          name: DAV-Class4-Study-Helper-APK
+          path: DAV-Class4-Study-Helper.apk
+
+      - name: Publish APK in Releases (easy download link)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: DAV Class 4 Study Helper (latest)
+          make_latest: true
+          body: |
+            Download **DAV-Class4-Study-Helper.apk** below and open it on an Android phone to install.
+            (Allow "Install unknown apps" when the phone asks.)
+            Built from commit ${{ github.sha }}.
+          files: DAV-Class4-Study-Helper.apk
+
+      - name: Update website (GitHub Pages)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./www
+          enable_jekyll: false
