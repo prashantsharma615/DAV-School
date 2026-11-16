@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1e3a8a">
+<title>DAV Class 4 Study Helper</title>
+<link rel="manifest" href="manifest.json">
+<style>
+  :root{--blue:#1e3a8a;--bg:#f3f6fc;--card:#fff;--ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--accent:#f59e0b}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Segoe UI",Roboto,"Noto Sans","Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--ink);font-size:16px;-webkit-tap-highlight-color:transparent}
+  header{background:var(--blue);color:#fff;padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top));display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
+  header h1{font-size:18px;margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  header button{background:rgba(255,255,255,.15);border:0;color:#fff;border-radius:10px;padding:8px 12px;font-size:14px}
+  main{max-width:760px;margin:0 auto;padding:16px}
+  .card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:14px}
+  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(160deg,#1e3a8a,#3b82f6)}
+  .login{width:100%;max-width:380px;text-align:center}
+  .logo{font-size:52px;margin-bottom:4px}
+  .login h2{margin:4px 0 2px}
+  .login p{color:var(--muted);margin:0 0 18px;font-size:14px}
+  label{display:block;text-align:left;font-size:14px;color:var(--muted);margin:10px 0 4px}
+  input,select{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;background:#fff}
+  input:focus{outline:none;border-color:#3b82f6}
+  .btn{display:block;width:100%;background:var(--blue);color:#fff;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:600;margin-top:16px}
+  .btn.light{background:#e0e7ff;color:var(--blue)}
+  .btn.small{display:inline-block;width:auto;padding:8px 12px;font-size:13px;margin:0}
+  .btn.danger{background:#fee2e2;color:#b91c1c}
+  .err{color:#b91c1c;font-size:14px;min-height:20px;margin-top:8px}
+  .hello{font-size:20px;font-weight:700;margin:4px 0}
+  .search{position:relative;margin:12px 0 18px}
+  .search input{padding-left:42px;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);border-color:transparent}
+  .search span{position:absolute;left:14px;top:12px;font-size:18px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .subj{border:0;border-radius:16px;padding:18px 12px;color:#fff;text-align:left;font-size:16px;font-weight:700;min-height:104px;display:flex;flex-direction:column;justify-content:space-between}
+  .subj .ic{font-size:30px}
+  .subj small{font-weight:400;opacity:.9;font-size:13px}
+  .list .row{display:flex;align-items:center;gap:12px;padding:14px;background:#fff;border-radius:14px;margin-bottom:10px;border:0;width:100%;text-align:left;font-size:16px;color:var(--ink)}
+  .num{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;flex-shrink:0}
+  .row .t{flex:1}
+  .row small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+  .qa{background:#fff;border-radius:14px;margin-bottom:10px;overflow:hidden}
+  .qa button{width:100%;text-align:left;background:none;border:0;padding:14px 16px;font-size:16px;font-weight:600;color:var(--ink);display:flex;gap:10px}
+  .qa .q-ic{color:var(--blue)}
+  .qa .ans{display:none;padding:0 16px 16px 40px;line-height:1.55;color:#374151;white-space:pre-line}
+  .qa.open .ans{display:block}
+  .qa.open button{color:var(--blue)}
+  .tag{display:inline-block;font-size:12px;padding:3px 8px;border-radius:20px;color:#fff;margin-bottom:6px}
+  .summary{background:#fffbeb;border-left:4px solid var(--accent);padding:12px 14px;border-radius:10px;margin-bottom:14px;font-size:15px}
+  .sec{font-weight:700;color:var(--blue);margin:16px 4px 8px;font-size:15px}
+  .muted{color:var(--muted);font-size:14px}
+  mark{background:#fde68a;border-radius:3px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  td,th{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
+  .row2{display:flex;gap:8px}
+  .row2>*{flex:1}
+  .pill{white-space:nowrap;font-family:monospace;background:#f1f5f9;padding:2px 6px;border-radius:6px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;z-index:20}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:30}
+  .modal .card{max-width:420px;width:100%;white-space:pre-line}
+  .modal textarea{width:100%;height:180px;font-family:monospace;font-size:12px;border:1.5px solid var(--line);border-radius:10px;padding:8px;white-space:pre}
+  .foot{text-align:center;color:var(--muted);font-size:12px;margin:24px 0 8px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script src="students.js"></script>
+<script src="data/english.js"></script>
+<script src="data/hindi.js"></script>
+<script src="data/maths.js"></script>
+<script src="data/science.js"></script>
+<script src="data/sst.js"></script>
+<script src="data/computer.js"></script>
+<script>
+/* ---------- Safe storage (falls back to memory if blocked) ---------- */
+const mem = {};
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return k in mem ? mem[k] : d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ mem[k] = v; } },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){ delete mem[k]; } }
+};
+
+/* ---------- SHA-256 (passwords are stored hashed, never as plain text) ---------- */
+function sha256(ascii){
+  function r(v,a){return (v>>>a)|(v<<(32-a));}
+  const utf8 = unescape(encodeURIComponent(ascii));
+  const K=[],H=[];let p=2,c=0;const isC={};
+  while(c<64){ if(!isC[p]){ for(let i=0;i<313;i+=p) isC[i]=p; H[c]=(Math.pow(p,.5)*4294967296)|0; K[c++]=(Math.pow(p,1/3)*4294967296)|0; } p++; }
+  let hash=H.slice(0,8), words=[], s=utf8+'\x80';
+  while(s.length%64-56) s+='\x00';
+  for(let i=0;i<s.length;i++){ const j=s.charCodeAt(i); words[i>>2]|=j<<((3-i)%4)*8; }
+  words[words.length]=((utf8.length*8)/4294967296)|0; words[words.length]=(utf8.length*8);
+  for(let j=0;j<words.length;){
+    const w=words.slice(j,j+=16), old=hash; hash=hash.slice(0,8);
+    for(let i=0;i<64;i++){
+      const w15=w[i-15], w2=w[i-2], a=hash[0], e=hash[4];
+      const t1=hash[7]+(r(e,6)^r(e,11)^r(e,25))+((e&hash[5])^((~e)&hash[6]))+K[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(r(w15,7)^r(w15,18)^(w15>>>3))+w[i-7]+(r(w2,17)^r(w2,19)^(w2>>>10)))|0);
+      const t2=(r(a,2)^r(a,13)^r(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+      hash=[(t1+t2)|0].concat(hash); hash[4]=(hash[4]+t1)|0; hash.length=8;
+    }
+    for(let i=0;i<8;i++) hash[i]=(hash[i]+old[i])|0;
+  }
+  return hash.map(h=>('00000000'+(h>>>0).toString(16)).slice(-8)).join('');
+}
+const SALT = "dav4-study-helper";
+const hp = (id, pw) => sha256(SALT + "|" + id.toUpperCase() + "|" + pw);
+
+/* ---------- Users ---------- */
+const DEFAULT_ADMIN = { id: "ADMIN", pass: "admin123" };
+function adminHash(){ return store.get("dav4_admin", hp(DEFAULT_ADMIN.id, DEFAULT_ADMIN.pass)); }
+function localStudents(){ return store.get("dav4_students", []); }
+function saveLocalStudents(a){ store.set("dav4_students", a); }
+function removedPresets(){ return store.get("dav4_removed", []); }
+function allStudents(){
+  const removed = removedPresets();
+  const local = localStudents();
+  const localIds = new Set(local.map(s=>s.id));
+  const preset = (window.PRESET_STUDENTS||[])
+    .filter(s=>!removed.includes(s.id) && !localIds.has(s.id))
+    .map(s=>({ id:s.id, name:s.name, section:s.section||"", hash: hp(s.id, s.pass), preset:true, plain:s.pass }));
+  return preset.concat(local);
+}
+function nextId(){
+  let max = 0;
+  allStudents().forEach(s=>{ const m = /^DAV4-(\d+)$/.exec(s.id); if(m) max = Math.max(max, +m[1]); });
+  return "DAV4-" + String(max+1).padStart(3,"0");
+}
+function randomPass(){
+  const w = ["sun","star","tree","kite","lion","moon","rose","bird","ship","cake"];
+  return w[Math.floor(Math.random()*w.length)] + (100 + Math.floor(Math.random()*900));
+}
+
+/* ---------- Data ---------- */
+const ORDER = ["english","hindi","maths","science","sst","computer"];
+const SUBJECTS = (window.SYLLABUS||[]).slice().sort((a,b)=>ORDER.indexOf(a.id)-ORDER.indexOf(b.id));
+const INDEX = [];
+SUBJECTS.forEach(s=>s.chapters.forEach((c,ci)=>c.qa.forEach(([q,a])=>INDEX.push({s,ci,c,q,a}))));
+
+/* ---------- Helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = t => String(t).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function toast(msg){ const d=document.createElement("div"); d.className="toast"; d.textContent=msg; document.body.appendChild(d); setTimeout(()=>d.remove(),2200); }
+let session = store.get("dav4_session", null);
+const history_ = [];
+function go(view, arg, push=true){ if(push) history_.push([currentView, currentArg]); currentView=view; currentArg=arg; render(); window.scrollTo(0,0); }
+let currentView = "home", currentArg = null;
+function back(){ const p = history_.pop(); if(p){ currentView=p[0]; currentArg=p[1]; render(); } else { currentView="home"; render(); } }
+// Android back button (Capacitor App plugin)
+try{
+  const CapApp = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+  if(CapApp) CapApp.addListener("backButton", ()=>{ if(session && history_.length) back(); else CapApp.exitApp(); });
+}catch(e){}
+
+function header(title, showBack){
+  return `<header>${showBack?`<button onclick="back()">←</button>`:""}<h1>${esc(title)}</h1>
+    ${session && session.role==="admin" && currentView!=="admin" ? `<button onclick="go('admin')">Admin</button>`:""}
+    <button onclick="logout()">Logout</button></header>`;
+}
+
+/* ---------- Views ---------- */
+function viewLogin(){
+  return `<div class="login-wrap"><div class="card login">
+    <div class="logo">📚</div>
+    <h2>DAV Class 4</h2>
+    <p>Study Helper — Questions &amp; Answers</p>
+    <label>Login ID</label><input id="lid" autocomplete="username" placeholder="e.g. DAV4-001" autocapitalize="characters">
+    <label>Password</label><input id="lpw" type="password" autocomplete="current-password" placeholder="Password">
+    <div class="err" id="lerr"></div>
+    <button class="btn" onclick="doLogin()">Login</button>
+    <p style="margin-top:14px">Ask your teacher for your Login ID and password.</p>
+  </div></div>`;
+}
+function doLogin(){
+  const id = $("#lid").value.trim().toUpperCase(), pw = $("#lpw").value;
+  if(!id || !pw){ $("#lerr").textContent = "Please enter your ID and password."; return; }
+  if(id === DEFAULT_ADMIN.id && hp(id,pw) === adminHash()){
+    session = { role:"admin", id, name:"Admin" };
+  } else {
+    const s = allStudents().find(x=>x.id===id);
+    if(!s || s.hash !== hp(id,pw)){ $("#lerr").textContent = "Wrong ID or password. Try again."; return; }
+    session = { role:"student", id, name:s.name };
+  }
+  store.set("dav4_session", session);
+  currentView = session.role==="admin" ? "admin" : "home"; history_.length=0; render();
+}
+function logout(){ session=null; store.del("dav4_session"); history_.length=0; currentView="home"; render(); }
+
+function viewHome(){
+  const first = (session.name||"").split(" ")[0];
+  return header("DAV Class 4 Study Helper") + `<main>
+    <div class="hello">Hello, ${esc(first)}! 👋</div>
+    <div class="muted">What do you want to learn today?</div>
+    <div class="search"><span>🔎</span><input id="q" placeholder="Search any question… e.g. photosynthesis, perimeter, संज्ञा" onkeydown="if(event.key==='Enter')doSearch()"></div>
+    <div class="grid">${SUBJECTS.map(s=>`<button class="subj" style="background:${s.color}" onclick="go('subject','${s.id}')">
+      <span class="ic">${s.icon}</span><span>${esc(s.name)}<br><small>${esc(s.book||'')}</small></span></button>`).join("")}</div>
+    <div class="foot">Answers are written to follow the DAV Class 4 syllabus.<br>Always check with your textbook and teacher.</div>
+  </main>`;
+}
+function doSearch(){ const v=$("#q").value.trim(); if(v) go("search", v); }
+
+function viewSubject(id){
+  const s = SUBJECTS.find(x=>x.id===id); let sec=null, n=0, out="";
+  s.chapters.forEach((c,i)=>{
+    if(c.section && c.section!==sec){ sec=c.section; n=0; out+=`<div class="sec">${esc(sec)}</div>`; }
+    n++;
+    const info = c.readOnly ? "केवल पढ़ने के लिए" : (c.qa.length ? c.qa.length+" questions" : "Coming soon");
+    out+=`<button class="row" onclick="go('chapter','${s.id}|${i}')"><span class="num" style="background:${c.qa.length?s.color:'#9ca3af'}">${n}</span>
+    <span class="t">${esc(c.title)}<small>${info}</small></span><span>›</span></button>`;
+  });
+  return header(s.name, true) + `<main><div class="muted" style="margin-bottom:10px">📖 ${esc(s.book||"")}</div><div class="list">${out}</div></main>`;
+}
+
+function qaHtml(q,a,hl){
+  const h = t => hl ? highlight(t,hl) : esc(t);
+  return `<div class="qa"><button onclick="this.parentNode.classList.toggle('open')"><span class="q-ic">Q.</span><span>${h(q)}</span></button><div class="ans"><b>Ans.</b> ${h(a)}</div></div>`;
+}
+function viewChapter(arg){
+  const [sid, ci] = arg.split("|"); const s = SUBJECTS.find(x=>x.id===sid); const c = s.chapters[+ci];
+  return header(s.name, true) + `<main>
+    <span class="tag" style="background:${s.color}">${esc(c.section||s.name)}</span>
+    <h2 style="margin:4px 0 10px">${esc(c.title)}</h2>
+    <div class="summary">${esc(c.summary)}</div>
+    ${c.qa.length?`<div class="row2" style="margin-bottom:12px"><button class="btn small light" onclick="document.querySelectorAll('.qa').forEach(e=>e.classList.add('open'))">Show all answers</button>
+    <button class="btn small light" onclick="document.querySelectorAll('.qa').forEach(e=>e.classList.remove('open'))">Hide all (practice)</button></div>`:""}
+    ${c.qa.length ? c.qa.map(([q,a])=>qaHtml(q,a)).join("") + `<div class="muted" style="text-align:center;margin-top:10px">Tap a question to see its answer.</div>`
+      : `<div class="card" style="text-align:center"><div style="font-size:40px">${c.readOnly?"📖":"⏳"}</div><p>${c.readOnly?"यह पाठ केवल पढ़ने के लिए है। परीक्षा में इससे सवाल नहीं पूछे जाएँगे।":"Questions and answers for this lesson are coming soon."}</p></div>`}
+  </main>`;
+}
+
+function norm(t){ return t.toLowerCase().normalize("NFC"); }
+function highlight(text, query){
+  let out = esc(text);
+  query.split(/\s+/).filter(w=>w.length>1).forEach(w=>{
+    const re = new RegExp("(" + esc(w).replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")", "gi");
+    out = out.replace(re, "<mark>$1</mark>");
+  });
+  return out;
+}
+function viewSearch(query){
+  const words = norm(query).split(/\s+/).filter(Boolean);
+  const scored = INDEX.map(it=>{
+    const hay = norm(it.q + " " + it.a + " " + it.c.title + " " + it.s.name);
+    let score = 0; words.forEach(w=>{ if(hay.includes(w)) score += norm(it.q).includes(w) ? 3 : 1; });
+    return [score, it];
+  }).filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,40);
+  return header("Search", true) + `<main>
+    <div class="search"><span>🔎</span><input id="q" value="${esc(query)}" onkeydown="if(event.key==='Enter'){const v=this.value.trim(); if(v){currentArg=v;render();}}"></div>
+    <div class="muted" style="margin-bottom:10px">${scored.length ? scored.length + " result(s) for “" + esc(query) + "”" : "No answers found for “" + esc(query) + "”. Try a different word, or ask your teacher."}</div>
+    ${scored.map(([,it])=>`<div><span class="tag" style="background:${it.s.color}">${esc(it.s.name)} · ${esc(it.c.title)}</span>${qaHtml(it.q,it.a,query)}</div>`).join("")}
+  </main>`;
+}
+
+/* ---------- Admin ---------- */
+function viewAdmin(){
+  const list = allStudents();
+  return header("Admin Panel", false) + `<main>
+    <div class="card"><h3 style="margin-top:0">➕ Create student login</h3>
+      <label>Student name</label><input id="sn" placeholder="Full name">
+      <div class="row2"><div><label>Section</label><input id="ss" placeholder="A"></div>
+      <div><label>Login ID</label><input id="sid" value="${nextId()}"></div></div>
+      <label>Password</label><input id="sp" value="${randomPass()}">
+      <div class="err" id="serr"></div>
+      <button class="btn" onclick="addStudent()">Create login</button>
+    </div>
+    <div class="card"><h3 style="margin-top:0">👩‍🎓 Students (${list.length})</h3>
+      ${list.length ? `<table><tr><th>ID</th><th>Name</th><th>Sec</th><th></th></tr>
+      ${list.map(s=>`<tr><td><span class="pill">${esc(s.id)}</span></td><td>${esc(s.name)}</td><td>${esc(s.section)}</td>
+        <td style="white-space:nowrap"><button class="btn small light" onclick="resetPw('${s.id}')">Reset</button>
+        <button class="btn small danger" onclick="delStudent('${s.id}')">✕</button></td></tr>`).join("")}</table>` : `<div class="muted">No students yet.</div>`}
+      <button class="btn light" onclick="exportStudents()">⬇ Export student list (students.js)</button>
+      <p class="muted">Logins you create here are saved on <b>this device</b>. To make them work on every student's phone, export the list, put the file in the app's <span class="pill">www</span> folder and build a new version (see the README).</p>
+    </div>
+    <div class="card"><h3 style="margin-top:0">🔑 Change admin password</h3>
+      <label>New password</label><input id="ap" type="password" placeholder="At least 6 characters">
+      <button class="btn" onclick="changeAdmin()">Save</button>
+    </div>
+    <button class="btn light" onclick="go('home')">Open study app (preview)</button>
+  </main>`;
+}
+let lastPasswords = store.get("dav4_lastpw", {}); // remembers new passwords so admin can export them
+function addStudent(){
+  const name=$("#sn").value.trim(), section=$("#ss").value.trim().toUpperCase(), id=$("#sid").value.trim().toUpperCase(), pw=$("#sp").value.trim();
+  if(!name||!id||!pw){ $("#serr").textContent="Fill in name, ID and password."; return; }
+  if(pw.length<4){ $("#serr").textContent="Password should be at least 4 characters."; return; }
+  if(id===DEFAULT_ADMIN.id || allStudents().some(s=>s.id===id)){ $("#serr").textContent="This ID already exists."; return; }
+  const a = localStudents(); a.push({ id, name, section, hash: hp(id,pw) }); saveLocalStudents(a);
+  lastPasswords[id]=pw; store.set("dav4_lastpw", lastPasswords);
+  alertBox(`Login created ✅\n\nName: ${name}\nID: ${id}\nPassword: ${pw}\n\nWrite this down and give it to the student.`);
+  render();
+}
+function delStudent(id){
+  modal("Delete login <b>"+esc(id)+"</b>?", [{label:"Cancel", cls:"light"}, {label:"Delete", cls:"danger", fn:()=>doDelete(id)}]);
+}
+function doDelete(id){
+  saveLocalStudents(localStudents().filter(s=>s.id!==id));
+  if((window.PRESET_STUDENTS||[]).some(s=>s.id===id)){ const r=removedPresets(); r.push(id); store.set("dav4_removed", r); }
+  delete lastPasswords[id]; store.set("dav4_lastpw", lastPasswords); render();
+}
+function resetPw(id){
+  modal(`New password for <b>${esc(id)}</b>:<input id="npw" value="${randomPass()}" style="margin-top:10px">`,
+    [{label:"Cancel", cls:"light"}, {label:"Save", fn:m=>{ const v=m.querySelector("#npw").value.trim(); if(v.length<4){ toast("At least 4 characters"); return false; } doReset(id,v); }}]);
+}
+function doReset(id,pw){
+  const s = allStudents().find(x=>x.id===id);
+  const a = localStudents().filter(x=>x.id!==id); a.push({ id, name:s.name, section:s.section, hash: hp(id,pw) }); saveLocalStudents(a);
+  lastPasswords[id]=pw; store.set("dav4_lastpw", lastPasswords);
+  alertBox(`Password changed ✅\n\nID: ${id}\nNew password: ${pw}`); render();
+}
+function changeAdmin(){
+  const pw=$("#ap").value; if(pw.length<6){ toast("Use at least 6 characters"); return; }
+  store.set("dav4_admin", hp(DEFAULT_ADMIN.id, pw)); $("#ap").value=""; toast("Admin password changed");
+}
+function exportStudents(){
+  const rows = allStudents().map(s=>{
+    const pass = s.preset && !lastPasswords[s.id] ? s.plain : lastPasswords[s.id];
+    return pass ? `  { id: ${JSON.stringify(s.id)}, name: ${JSON.stringify(s.name)}, section: ${JSON.stringify(s.section)}, pass: ${JSON.stringify(pass)} }` : null;
+  });
+  const missing = rows.filter(r=>!r).length;
+  const text = "// Exported from DAV Class 4 Study Helper admin panel\nwindow.PRESET_STUDENTS = [\n" + rows.filter(Boolean).join(",\n") + "\n];\n";
+  modal(`<b>students.js</b>\nCopy this text, save it as <span class="pill">students.js</span> in the app's www folder, then rebuild the app.${missing?`\n⚠ ${missing} student(s) skipped — use Reset to give them a new password first.`:""}<textarea readonly>${esc(text)}</textarea>`,
+    [{label:"Copy", fn:()=>{ try{ navigator.clipboard.writeText(text).then(()=>toast("Copied"),()=>toast("Select the text and copy it")); }catch(e){ toast("Select the text and copy it"); } return false; }}, {label:"Close", cls:"light"}]);
+}
+function modal(html, buttons){
+  const m=document.createElement("div"); m.className="modal";
+  m.innerHTML=`<div class="card">${html}<div class="row2" style="margin-top:14px">${buttons.map((b,i)=>`<button class="btn small ${b.cls||''}" style="padding:12px" data-i="${i}">${esc(b.label)}</button>`).join("")}</div></div>`;
+  m.querySelectorAll("[data-i]").forEach(el=>el.onclick=()=>{ const b=buttons[+el.dataset.i]; const keep=b.fn&&b.fn(m)===false; if(!keep) m.remove(); });
+  document.body.appendChild(m); return m;
+}
+function alertBox(t){ modal(esc(t), [{label:"OK"}]); }
+
+/* ---------- Render ---------- */
+function render(){
+  const app = $("#app");
+  if(!session){ app.innerHTML = viewLogin(); return; }
+  if(currentView==="admin" && session.role!=="admin") currentView="home";
+  const v = { home:viewHome, subject:viewSubject, chapter:viewChapter, search:viewSearch, admin:viewAdmin }[currentView] || viewHome;
+  app.innerHTML = v(currentArg);
+}
+if(session && session.role==="admin") currentView="admin";
+render();
+</script>
+</body>
+</html>
